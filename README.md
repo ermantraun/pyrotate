@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log Rotation Script</title>
 </head>
 <body>
 
 <h1>Log Rotation Script</h1>
 
 <p>This script automates log rotation by compressing log files based on size and rotating them at specified intervals. It also provides an option to send the compressed logs to a server.</p>
+
+[Docker Hub Repository](https://hub.docker.com/r/yareee/pyrotate)
 
 <h2>Usage</h2>
 
@@ -29,6 +30,18 @@
 
 <p>Do not touch the contents of the <code>rotate</code> folder, as it may disrupt the program's functionality.</p>
 
+<p>If you are using Docker, please take into account the following:</p>
+
+<ol>
+  <li>To grant the container access to logs, it should be launched with the additional argument <code>--mount type=bind,source=/var/log/syslog,target=/mnt/log</code>, where:</li>
+  <ul>
+    <li><code>source</code> is the path to the folder with logs on the host machine,</li>
+    <li><code>target</code> is the path to the folder with logs visible within the container (it is not recommended to change the target). Ensure that the specified target folder exists in the file system hierarchy visible to the container. To create it, refer to point 3.</li>
+  </ul>
+  <li>The <code>-path</code> argument should be constructed according to the template <code>"target/log_file"</code>, where <code>target</code> is equal to the target specified in the <code>--mount</code> key.</li>
+  <li>To create the necessary folder for the target value from point 1, run <code>docker build</code> with the <code>--build-arg logdir=/dir</code> argument, where <code>logdir</code> is the path to the new folder.</li>
+</ol>
+
 <h2>Features</h2>
 
 <ul>
@@ -44,7 +57,7 @@
 
 <h2>License</h2>
 
-<p>This log rotation script is licensed under the <a href="LICENSE">MIT License</a>.</p>
+<p>This log rotation script is licensed under the <a href="https://github.com/ermantraun/pyrotate/blob/main/LICENSE">GNU License</a>.</p>
 
 </body>
 </html>
